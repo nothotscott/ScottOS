@@ -7,6 +7,7 @@ disk_string1	db	"Disk read error", 0
 ; ch = Cylinder number
 ; dh = Head number
 ; cl = Sector number
+GLOBAL	disk_read
 disk_read:
 	mov		ah, 0x02			; read disk byte
 	int		0x13				; BIOS interrupt

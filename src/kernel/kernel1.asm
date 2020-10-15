@@ -1,13 +1,14 @@
-BITS	64
-EXTERN	_start
+BITS		64
+EXTERN		main
+%include	"macros.asm"
 
-clear_screen:
-	mov	edi, 0xb8000
-	mov	rax, 0x1f201f201f201f20
-	mov	ecx, 500
-	rep	stosq
+jmp			kernel_start
+%include	"io/idt.asm"
 
-call	_start
-hlt
+; ### Main Code ###
+GLOBAL	kernel_start
+kernel_start:
+	call	main
+	jmp		$
 
 TIMES		512-($-$$)	db	0

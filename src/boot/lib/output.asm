@@ -1,5 +1,6 @@
 BITS	16
 ; bx = String address
+GLOBAL	print_bios
 print_bios:
 	mov	ah, 0x0e				; magic high byte
 	.feed:

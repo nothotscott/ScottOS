@@ -1,10 +1,9 @@
 %define	PAGE_TABLE_ENTRY	0x1000
 %define	BOOT_SPACE			0x7c00
-%define	LOADER_SPACE		0x7e00
-%define	KERNEL_SPACE		0x8600
+%define	LOADER_SPACE		BOOT_SPACE + 512
+%define	KERNEL_SPACE		LOADER_SPACE + 512
 
 %define	OS_NAME				"ScottOS"
-
 
 %macro PRINT_BIOS 1
 	mov		bx, %1

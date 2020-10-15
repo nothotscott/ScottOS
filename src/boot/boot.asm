@@ -6,7 +6,8 @@
 %include	"header.asm"
 
 BITS	16
-ORG		BOOT_SPACE
+EXTERN	loader_start
+;ORG		BOOT_SPACE
 
 jmp			short main
 nop
@@ -16,7 +17,6 @@ nop
 boot_disk	db	0
 
 string1		db	OS_NAME, " BIOS loaded", 0
-string2		db	"Entering proteted mode", 0
 
 
 ; ### Main ###
@@ -32,7 +32,7 @@ main:
 	; Fetch loader & kernel
 	DISK_READ	LOADER_SPACE, 1, 0, 0, 2
 	DISK_READ	KERNEL_SPACE, 60, 0, 0, 3
-	jmp			LOADER_SPACE
+	jmp			loader_start
 
 ; ### Includes ###
 %include	"lib/output.asm"
@@ -43,4 +43,4 @@ TIMES		510-($-$$)	db	0
 dw			0xaa55
 
 ; ### Loader ###
-%include	"loader.asm"
+;%include	"loader.asm"
