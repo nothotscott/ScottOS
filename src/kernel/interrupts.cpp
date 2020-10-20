@@ -4,14 +4,14 @@
 
 using namespace io;
 using namespace gfx;
-using namespace dstruct;
+using namespace structure;
 
 extern idt64 _idt[IO_IDT_SIZE];
-extern uint_64 _isr1;
+extern ulong _isr1;
 
 // TODO dynamically allocate event handler arrays after memalloc
-void (*key_event_handlers[EVENT_HANDLERS_BUFFER_SIZE])(uint_8 scan_code, uint_8 chr);
-void (*key_cleanup_handlers[EVENT_HANDLERS_BUFFER_SIZE])(uint_8 scan_code, uint_8 chr);
+void (*key_event_handlers[EVENT_HANDLERS_BUFFER_SIZE])(byte scan_code, byte chr);
+void (*key_cleanup_handlers[EVENT_HANDLERS_BUFFER_SIZE])(byte scan_code, byte chr);
 
 void set_default_handlers(){
 	key_event_handlers[0] = kb::key_event_handler;
@@ -21,17 +21,17 @@ void set_default_handlers(){
 
 
 extern "C" void _isr1_handler() {
-	uint_8 scan_code = port::in(0x60);
-	uint_8 chr = 0;
+	byte scan_code = port::in(0x60);
+	byte chr = 0;
 	if (scan_code < 0x3A) {
 		chr = kb::scan_codes_1[scan_code];
 	}
-	for(uint_8 i = 0; i < EVENT_HANDLERS_BUFFER_SIZE; i++) {
+	for(byte i = 0; i < EVENT_HANDLERS_BUFFER_SIZE; i++) {
 		if (key_event_handlers[i] != 0) {
 			key_event_handlers[i](scan_code, chr);
 		}
 	}
-	for(uint_8 i = 0; i < EVENT_HANDLERS_BUFFER_SIZE; i++) {
+	for(byte i = 0; i < EVENT_HANDLERS_BUFFER_SIZE; i++) {
 		if (key_cleanup_handlers[i] != 0) {
 			key_cleanup_handlers[i](scan_code, chr);
 		}

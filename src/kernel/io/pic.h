@@ -21,7 +21,7 @@ namespace io {
 			}
 
 			static void remap(){
-				uint_8 d1, d2;
+				byte d1, d2;
 				d1 = port::in(IO_PIC1_DATA);
 				d2 = port::in(IO_PIC2_DATA);
 

@@ -1,9 +1,5 @@
 /* OUTPUT_FORMAT(binary) */
-/* OUTPUT_FORMAT(elf64-x86-64) */
 OUTPUT_FORMAT(elf64-x86-64)
-
-/* ENTRY(kernel_start) */
-ENTRY(kernel_start)
 
 INPUT
 (
@@ -21,24 +17,25 @@ OUTPUT
 SECTIONS
 {
 	. = 0x8000;
-	.text :ALIGN(4K)		/* Code */
+	.text :ALIGN(4K)				/* Code */
 	{
+		*(.multiboot)
 		*(.text)
 	}
-	.idt BLOCK(4K) : ALIGN(4K)
+	.idt BLOCK(4K) : ALIGN(4K)		/* IDT */
 	{
-		_idt = .;
+		_idt = ABSOLUTE(.);
 		. = . + 4K;
 	}
-	.data : ALIGN(4K)		/* Data */
+	.data BLOCK(4K) : ALIGN(4K)		/* Data */
 	{
 		*(.data)
 	}
-	.rodata : ALIGN(4K)		/* Read-only data */
+	.rodata BLOCK(4K) : ALIGN(4K)	/* Read-only data */
 	{
 		*(.rodata)
 	}
-	.bss : ALIGN(4K)		/* Read-write data (uninitialized) and stack */
+	.bss BLOCK(4K) : ALIGN(4K)		/* Read-write data (uninitialized) and stack */
 	{
 		*(COMMON)
 		*(.bss)

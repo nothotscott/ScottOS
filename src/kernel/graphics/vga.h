@@ -1,8 +1,9 @@
 #pragma once
 
 #include "structure/string.h"
+#include "memory/map.h"
 
-#define GFX_VGA_MEMORY	(uint_8*)	0xb8000
+#define GFX_VGA_MEMORY	(byte*)	0xb8000
 #define GFX_VGA_WIDTH				80
 #define GFX_VGA_HEIGHT				25
 #define GFX_VGA_DEFAULT_CLEAR_COLOR	GFX_VGA_BG_BLUE | GFX_VGA_FG_WHITE
@@ -48,19 +49,21 @@
 namespace gfx {
 	class vga {
 		public:
-			static void set_cursor_position(uint_16);
-			static void set_cursor_delta(uint_16);
-			static void set_cursor_coords(uint_8, uint_8);
-			static uint_16 get_position_from_coords(uint_8, uint_8);
-			static void print(dstruct::string, uint_8 = GFX_VGA_DEFAULT_TEXT_COLOR);
-			static void print(const char*, uint_8 = GFX_VGA_DEFAULT_TEXT_COLOR);
-			static void print(uint_8, uint_8 = GFX_VGA_DEFAULT_TEXT_COLOR);
-			static void println(dstruct::string, uint_8 = GFX_VGA_DEFAULT_TEXT_COLOR);
-			static void println(const char*, uint_8 = GFX_VGA_DEFAULT_TEXT_COLOR);
-			static void clear(uint_8 = GFX_VGA_DEFAULT_CLEAR_COLOR);
+			static void set_cursor_position(ushort);
+			static void set_cursor_delta(ushort);
+			static void set_cursor_coords(byte, byte);
+			static ushort get_position_from_coords(byte, byte);
+			static void print(structure::string, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
+			static void print(const char*, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
+			static void print(byte, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
+			static void print(mem::map_entry*, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
+			static void println(structure::string, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
+			static void println(const char*, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
+			static void newline();
+			static void clear(byte = GFX_VGA_DEFAULT_CLEAR_COLOR);
 
-			static void key_event_handler(uint_8 scan_code, uint_8 chr);
+			static void key_event_handler(byte scan_code, byte chr);
 		private:
-			inline static uint_16 cursor_position;
+			inline static ushort cursor_position;
 	};
 }

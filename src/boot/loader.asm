@@ -1,19 +1,11 @@
-EXTERN		print_bios
-;EXTERN		kernel_start
 %include	"header.asm"
-
 BITS	16
 
-; ### Data ###
-%include	"gdt.asm"
-string2		db	"Entering proteted mode", 0
+jmp	short enter_protected_mode
 
 ; ### Code ###
-GLOBAL	loader_start
-loader_start:
 enter_protected_mode:
-	; call	mem_detect
-	PRINT_BIOS	string2
+	call	mem_detect
 	; Enable A20
 	in		al, 0x92
 	or		al, 2
@@ -25,6 +17,24 @@ enter_protected_mode:
 	or		eax, 1
 	mov		cr0, eax
 	jmp		code_seg:start_protected_mode
+
+mem_detect:
+	mov	ax, 0
+	mov	es, ax
+	mov	di, MEM_MAP_SPACE
+	mov	edx, 0x534D4150	; magic number
+	mov	ebx, 0
+	.repeat:
+		mov	eax, 0xE820	; magic BIOS number
+		mov	ecx, 24		; listing size
+		int	0x15		; save listing
+		cmp	ebx, 0
+		je	.return
+		add	di, 24
+		inc	byte [mem_region_count]
+		jmp	.repeat
+	.return:
+	ret
 
 BITS		32
 start_protected_mode:
@@ -45,26 +55,7 @@ start_protected_mode:
 	call	edit_gdt
 	call	activate_sse
 	; Go to kernel space
-	;jmp		code_seg:kernel_start
 	jmp		code_seg:KERNEL_SPACE
-
-mem_detect:
-	mov	ax, 0
-	mov	es, ax
-	mov	di, mem_map		; probably safe to store here
-	mov	edx, 0x534D4150	; magic number
-	mov	ebx, 0
-	.repeat:
-		mov	eax, 0xE820	; magic BIOS number
-		mov	ecx, 24		; listing size
-		int	0x15		; save listing
-		cmp	ebx, 0
-		je	.return
-		add	di, 24
-		inc	byte [mem_region_count]
-		jmp	.repeat
-	.return:
-	ret
 	
 BITS		64
 activate_sse:
@@ -77,14 +68,19 @@ activate_sse:
 	mov	cr4, rax
 	ret
 
+; ### 16-bit Includes ###
+BITS		16
+%include	"gdt.asm"
 ; ### 32-bit Includes ###
 BITS		32
 %include	"lib/cpu32.asm"
 %include	"lib/paging.asm"
 
+BITS		16
 ; ## Variables ###
-mem_map:
-	db	0
+GLOBAL	mem_map_ptr
+mem_map_ptr:
+	dq	MEM_MAP_SPACE
 GLOBAL	mem_region_count
 mem_region_count:
 	db	0

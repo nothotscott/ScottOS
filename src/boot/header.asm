@@ -2,6 +2,7 @@
 %define	BOOT_SPACE			0x7c00
 %define	LOADER_SPACE		BOOT_SPACE + 512
 %define	KERNEL_SPACE		LOADER_SPACE + 512
+%define MEM_MAP_SPACE		0x5000
 
 %define	OS_NAME				"ScottOS"
 

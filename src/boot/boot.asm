@@ -6,8 +6,7 @@
 %include	"header.asm"
 
 BITS	16
-EXTERN	loader_start
-;ORG		BOOT_SPACE
+ORG		BOOT_SPACE
 
 jmp			short main
 nop
@@ -32,7 +31,7 @@ main:
 	; Fetch loader & kernel
 	DISK_READ	LOADER_SPACE, 1, 0, 0, 2
 	DISK_READ	KERNEL_SPACE, 60, 0, 0, 3
-	jmp			loader_start
+	jmp			LOADER_SPACE
 
 ; ### Includes ###
 %include	"lib/output.asm"

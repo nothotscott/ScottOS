@@ -6,7 +6,7 @@
 using namespace gfx;
 
 namespace io {
-	void kb::key_event_handler(uint_8 scan_code, uint_8 chr){
+	void kb::key_event_handler(byte scan_code, byte chr){
 		switch(scan_code) {
 			case 0x2A:	// left shift down
 				modifiers_down |= 1;
@@ -36,11 +36,11 @@ namespace io {
 				break;
 		}
 	}
-	void kb::key_cleanup_handler(uint_8 scan_code, uint_8 chr) {
+	void kb::key_cleanup_handler(byte scan_code, byte chr) {
 		last_scan_code = scan_code;
 	}
 
-	uint_8 kb::get_modifiers_down() {
+	byte kb::get_modifiers_down() {
 		return modifiers_down;
 	}
 	bool kb::is_shift_down() {

@@ -3,7 +3,7 @@
 namespace io {
 	class port {
 		public:
-			static void out(unsigned short port, unsigned char val);
-			static unsigned char in(unsigned short port);
+			static void out(ushort port, byte val);
+			static byte in(ushort port);
 	};
 }

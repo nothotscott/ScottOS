@@ -9,3 +9,8 @@ cd ../
 IF "%1"=="run" (
 	start bochsrc.bxrc
 )
+IF "%1"=="debug" (
+	cd src
+	make debug
+	cd ../
+)

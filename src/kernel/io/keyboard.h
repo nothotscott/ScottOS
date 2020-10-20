@@ -3,15 +3,15 @@
 namespace io {
 	class kb {
 		public:
-			static void key_event_handler(uint_8 scan_code, uint_8 chr);
-			static void key_cleanup_handler(uint_8 scan_code, uint_8 chr);
-			static uint_8 get_modifiers_down();
+			static void key_event_handler(byte scan_code, byte chr);
+			static void key_cleanup_handler(byte scan_code, byte chr);
+			static byte get_modifiers_down();
 			static bool is_shift_down();
 			static bool is_alt_down();
 			static bool is_special_key();
 		private:
-			inline static uint_8 modifiers_down = 0;
-			inline static uint_8 last_scan_code = 0;
+			inline static byte modifiers_down = 0;
+			inline static byte last_scan_code = 0;
 		public:
 			inline static const char scan_codes_1[] = {
 				0, 0, '1', '2',

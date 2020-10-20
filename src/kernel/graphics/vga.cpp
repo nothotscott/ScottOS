@@ -4,34 +4,36 @@
 #include "io/port.h"
 #include "io/keyboard.h"
 #include "structure/string.h"
+#include "memory/map.h"
 
 using namespace io;
-using namespace dstruct;
+using namespace structure;
+using namespace mem;
 
 namespace gfx {
-	void vga::set_cursor_position(uint_16 position) {
+	void vga::set_cursor_position(ushort position) {
 		port::out(0x3D4, 0x0F);
-		port::out(0x3D5, (uint_8)(position & 0xFF));
+		port::out(0x3D5, (byte)(position & 0xFF));
 		port::out(0x3D4, 0x0E);
-		port::out(0x3D5, (uint_8)((position >> 8) & 0xFF));
+		port::out(0x3D5, (byte)((position >> 8) & 0xFF));
 		cursor_position = position;
 	}
 
-	void vga::set_cursor_delta(uint_16 delta) {
+	void vga::set_cursor_delta(ushort delta) {
 		set_cursor_position(cursor_position + delta);
 	}
 
-	void vga::set_cursor_coords(uint_8 x, uint_8 y) {
+	void vga::set_cursor_coords(byte x, byte y) {
 		set_cursor_position(get_position_from_coords(x, y));
 	}
 
-	uint_16 vga::get_position_from_coords(uint_8 x, uint_8 y) {
+	ushort vga::get_position_from_coords(byte x, byte y) {
 		return y * GFX_VGA_WIDTH + x;
 	}
 
-	void vga::print(string str, uint_8 color) {
-		uint_8* char_ptr = (uint_8*)str;
-		uint_16 index = vga::cursor_position;
+	void vga::print(string str, byte color) {
+		byte* char_ptr = (byte*)str;
+		ushort index = vga::cursor_position;
 		while (*char_ptr != 0) {
 			switch(*char_ptr) {
 				case '\n':
@@ -49,10 +51,10 @@ namespace gfx {
 		}
 		set_cursor_position(index);
 	}
-	void vga::print(const char* str, uint_8 color) {
+	void vga::print(const char* str, byte color) {
 		print(string(str));
 	}
-	void vga::print(uint_8 chr, uint_8 color) {
+	void vga::print(byte chr, byte color) {
 		switch (chr) {
 			case '\n':
 				set_cursor_delta(GFX_VGA_WIDTH - cursor_position % GFX_VGA_WIDTH);
@@ -64,27 +66,44 @@ namespace gfx {
 				break;
 		}
 	}
-
-	void vga::println(string str, uint_8 color) {
-		print(str);
-		print('\n');
+	void vga::print(map_entry* entry, byte color) {
+		print("Memory base: ");
+		print(string::from_hex(entry->base_address));
+		newline();
+		print("Region length: ");
+		print(string::from_int(entry->region_length));
+		newline();
+		print("Region type: ");
+		print(string::from_int(entry->region_type));
+		newline();
+		print("Memory attributes: ");
+		print(string::from_int(entry->extended_attributes));
 	}
-	void vga::println(const char* str, uint_8 color) {
+
+	void vga::println(string str, byte color) {
 		print(str);
-		print('\n');
+		newline();
+	}
+	void vga::println(const char* str, byte color) {
+		print(str);
+		newline();
 	}
 
-	void vga::clear(uint_8 color) {
-		uint_64 color64 = (uint_64)color;
-		uint_64 value = (color64 << 8) + (color64 << 24) + (color64 << 40) + (color64 << 56);
-		for (uint_64* i = (uint_64*)GFX_VGA_MEMORY; i < (uint_64*)(GFX_VGA_MEMORY + GFX_VGA_WIDTH*GFX_VGA_HEIGHT*2); i++) {
+	void vga::newline() {
+		set_cursor_delta(GFX_VGA_WIDTH - cursor_position % GFX_VGA_WIDTH);
+	}
+
+	void vga::clear(byte color) {
+		ulong color64 = (ulong)color;
+		ulong value = (color64 << 8) + (color64 << 24) + (color64 << 40) + (color64 << 56);
+		for (ulong* i = (ulong*)GFX_VGA_MEMORY; i < (ulong*)(GFX_VGA_MEMORY + GFX_VGA_WIDTH*GFX_VGA_HEIGHT*2); i++) {
 			*i = value;
 		}
 		set_cursor_position(0);
 	}
 
 
-	void vga::key_event_handler(uint_8 scan_code, uint_8 chr){
+	void vga::key_event_handler(byte scan_code, byte chr){
 		if (chr != 0) {
 			if (kb::is_shift_down()){
 				print(chr - 32);
