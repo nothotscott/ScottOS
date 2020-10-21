@@ -56,7 +56,6 @@ namespace gfx {
 			static void print(structure::string, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
 			static void print(const char*, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
 			static void print(byte, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
-			static void print(mem::map_entry*, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
 			static void println(structure::string, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
 			static void println(const char*, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
 			static void newline();

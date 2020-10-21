@@ -1,5 +1,3 @@
-#pragma once
-
 #include "keyboard.h"
 #include "graphics/vga.h"
 

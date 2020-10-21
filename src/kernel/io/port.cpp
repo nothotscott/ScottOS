@@ -1,5 +1,3 @@
-#pragma once
-
 #include "port.h"
 
 namespace io {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "structure/string.h"
+
 #define MEM_MAP_USABLE_REGIONS_BUFFER_SIZE	5
 
 namespace mem {
@@ -13,6 +15,7 @@ namespace mem {
 	class map {
 		public:
 			static void set_usable_mem_regions(ulong*, byte);
+			static structure::string tostring(map_entry*);
 		public:
 			inline static byte usable_mem_regions_len;
 			inline static map_entry* usable_mem_regions[MEM_MAP_USABLE_REGIONS_BUFFER_SIZE];

@@ -9,6 +9,7 @@ namespace structure {
 			string(char*);
 			string(const char*, uint length);
 			string(char*, uint length);
+			string(string&);
 			template<typename T>
 			static structure::string from_hex(T);
 			template<typename T>

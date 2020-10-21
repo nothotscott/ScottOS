@@ -1,14 +1,10 @@
-#pragma once
-
 #include "vga.h"
 #include "io/port.h"
 #include "io/keyboard.h"
 #include "structure/string.h"
-#include "memory/map.h"
 
 using namespace io;
 using namespace structure;
-using namespace mem;
 
 namespace gfx {
 	void vga::set_cursor_position(ushort position) {
@@ -65,19 +61,6 @@ namespace gfx {
 				set_cursor_delta(1);
 				break;
 		}
-	}
-	void vga::print(map_entry* entry, byte color) {
-		print("Memory base: ");
-		print(string::from_hex(entry->base_address));
-		newline();
-		print("Region length: ");
-		print(string::from_int(entry->region_length));
-		newline();
-		print("Region type: ");
-		print(string::from_int(entry->region_type));
-		newline();
-		print("Memory attributes: ");
-		print(string::from_int(entry->extended_attributes));
 	}
 
 	void vga::println(string str, byte color) {

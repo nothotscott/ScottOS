@@ -1,5 +1,3 @@
-#pragma once
-
 #include "string.h"
 
 using namespace structure;
@@ -20,6 +18,10 @@ namespace structure {
 	string::string(char* ptr, uint length) {
 		m_ptr = ptr;
 		set_length(length);
+	}
+	string::string(string& str) {
+		m_ptr = str.m_ptr;
+		set_length(str.get_length());
 	}
 
 	string string::from_float(float value, byte scale) {
@@ -42,6 +44,7 @@ namespace structure {
 	}
 
 	string::~string() {
+		// delete m_ptr;
 	}
 
 

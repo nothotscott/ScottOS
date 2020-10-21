@@ -16,7 +16,7 @@ endif
 #########################################
 
 all:						boot kernel
-							$(LD) $(OUTPUT_DIR)/loader.o $(OUTPUT_DIR)/kernel.o -e 0x0000 -Ttext 0x7e00 -Tbss 0x101000 --oformat binary -o $(OUTPUT_DIR)/loader-kernel.bin
+							$(LD) $(OUTPUT_DIR)/loader.o $(OUTPUT_DIR)/kernel.o -e 0x0000 -Ttext 0x7e00 -Tbss 0x101000 -Tdata 0x201000 --oformat binary -o $(OUTPUT_DIR)/loader-kernel.bin
 							cat $(OUTPUT_DIR)/boot.bin $(OUTPUT_DIR)/loader-kernel.bin > $(OUTPUT_DIR)/ScottOS.flp
 
 .PHONY:	boot

@@ -6,6 +6,7 @@
 #include "graphics/vga.h"
 #include "structure/string.h"
 #include "memory/map.h"
+#include "memory/heap.h"
 
 /*	Additional implementations	*/
 #include "interrupts.cpp"
@@ -30,6 +31,7 @@ void setup() {
 	start_idt();
 	set_default_handlers();
 	map::set_usable_mem_regions(mem_map_ptr, mem_region_count);
+	heap::initalize(HEAP_START, HEAP_SIZE);
 }
 
 extern "C" void main() {
@@ -38,12 +40,8 @@ extern "C" void main() {
 	vga::println("Welcome to ScottOS");
 	vga::newline();
 	
-	for(byte i = 0; i < map::usable_mem_regions_len; i++) { // mem_region_count map::usable_mem_regions_len
-		map_entry* entry = map::usable_mem_regions[i]; // (map_entry*)mem_map_ptr map::usable_mem_regions[i]
-		vga::print(entry);
-		vga::newline();
-		vga::newline();
-	}
+	void* test_addr = malloc(60);
+	vga::println(string::from_hex((ulong)test_addr));
 
 	return;
 }
