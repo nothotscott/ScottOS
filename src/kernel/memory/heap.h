@@ -14,9 +14,12 @@ namespace mem {
 		public:
 			static void initalize(ulong, ulong);
 			static void* alloc(ulong);
+			static void free(void* addess);
+			static void combine_free(segment_header*, segment_header*);
 		private:
 			inline static segment_header* first;
 	};
-}
 
-const auto malloc = mem::heap::alloc;
+	const auto malloc = mem::heap::alloc;
+	const auto free = mem::heap::free;
+}

@@ -40,8 +40,19 @@ extern "C" void main() {
 	vga::println("Welcome to ScottOS");
 	vga::newline();
 	
-	void* test_addr = malloc(60);
-	vga::println(string::from_hex((ulong)test_addr));
+	void* test_addr1 = malloc(0x10);
+	void* test_addr2 = malloc(0x10);
+	void* test_addr3 = malloc(0x10);
+	vga::println(string::from_hex((ulong)test_addr1));
+	vga::println(string::from_hex((ulong)test_addr2));
+	vga::println(string::from_hex((ulong)test_addr3));
+
+	free(test_addr1);
+	free(test_addr2);
+	free(test_addr3);
+
+	void* test_addr4 = malloc(0x60);
+	vga::println(string::from_hex((ulong)test_addr4));
 
 	return;
 }
