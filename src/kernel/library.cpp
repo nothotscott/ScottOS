@@ -13,3 +13,4 @@
 // Memory
 #include "memory/map.cpp"
 #include "memory/heap.cpp"
+#include "memory/memory.cpp"

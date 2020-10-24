@@ -1,4 +1,5 @@
 #include "heap.h"
+#include "memory.h"
 
 namespace mem {
 	void heap::initalize(ulong heap_address, ulong heap_length) {
@@ -55,6 +56,12 @@ namespace mem {
 			current->next->prev_free = current->prev_free;
 		}
 		return current + 1;
+	}
+
+	void* heap::calloc(ulong size) {
+		void* address = alloc(size);
+		memory::set(address, 0, size);
+		return address;
 	}
 
 	void heap::free(void* address) {
