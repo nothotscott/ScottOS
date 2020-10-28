@@ -37,24 +37,22 @@ void setup() {
 extern "C" void main() {
 	setup();
 	vga::clear();
-	vga::println("Welcome to ScottOS");
+	//vga::println("Welcome to ScottOS");
+	const char* poop = "Test";
+	vga::print(poop);
 	vga::newline();
+
+	vga::println(string::from_hex(poop));
+	vga::print_memory((void*)((ulong)poop - 2), 16*3);
 	
-	void* test_addr1 = malloc(0x10);
-	void* test_addr2 = malloc(0x10);
-	void* test_addr3 = malloc(0x10);
-	vga::println(string::from_hex((ulong)test_addr1));
-	vga::println(string::from_hex((ulong)test_addr2));
-	vga::println(string::from_hex((ulong)test_addr3));
-
-	free(test_addr1);
-	free(test_addr2);
-	free(test_addr3);
-
-	void* test_addr4 = malloc(0x60);
-	vga::println(string::from_hex((ulong)test_addr4));
+	byte* ptr = new byte[16];
+	for(byte i = 0; i < 16; i++){
+		ptr[i] = i;
+	}
+	//vga::print_memory(ptr, 16*2);
+	vga::print(string::from_hex(0x1234));
 
 	return;
 }
 
-char temp_buffer[128];
+char temp_buffer[0x4000];

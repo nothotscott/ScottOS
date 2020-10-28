@@ -48,7 +48,7 @@ namespace gfx {
 		set_cursor_position(index);
 	}
 	void vga::print(const char* str, byte color) {
-		print(string(str));
+		print(string(str), color);
 	}
 	void vga::print(byte chr, byte color) {
 		switch (chr) {
@@ -64,11 +64,11 @@ namespace gfx {
 	}
 
 	void vga::println(string str, byte color) {
-		print(str);
+		print(str, color);
 		newline();
 	}
 	void vga::println(const char* str, byte color) {
-		print(str);
+		print(str, color);
 		newline();
 	}
 
@@ -83,6 +83,26 @@ namespace gfx {
 			*i = value;
 		}
 		set_cursor_position(0);
+	}
+
+	void vga::print_memory(void* address, ulong length, byte bpr, byte color, byte header_color) {
+		ulong start = (ulong)address - ((ulong)address % 8);
+		if(header_color != 0) {
+			print("Offset          ", header_color);
+			for(byte i = 0; i < bpr; i++){
+				print(' ', header_color);
+				print(string::from_hex(i), header_color);
+			}
+			newline();
+		}
+		for(ulong row = start; row < start + length; row += bpr){
+			print(string::from_hex(row), color);
+			for(byte* ptr = (byte*)row; ptr < (byte*)(row + bpr) && ptr < (byte*)(start + length); ptr++){
+				print(' ', color);
+				print(string::from_hex(*ptr), color);
+			}
+			newline();
+		}
 	}
 
 

@@ -3,6 +3,10 @@
 using namespace structure;
 
 namespace structure {
+	string::string(){
+		m_ptr = 0;
+		set_length(0);
+	}
 	string::string(const char* ptr) {
 		m_ptr = (char*)ptr;
 		set_length();
@@ -44,7 +48,7 @@ namespace structure {
 	}
 
 	string::~string() {
-		// delete m_ptr;
+		//delete m_ptr;
 	}
 
 

@@ -12,7 +12,7 @@
 
 #define GFX_VGA_BG_BLACK			0x00
 #define GFX_VGA_BG_BLUE				0x10
-#define GFX_VGA_BG_GREEM			0x20
+#define GFX_VGA_BG_GREEN			0x20
 #define GFX_VGA_BG_CYAN				0x30
 #define GFX_VGA_BG_RED				0x40
 #define GFX_VGA_BG_MAGENTA			0x50
@@ -29,7 +29,7 @@
 
 #define GFX_VGA_FG_BLACK			0x00
 #define GFX_VGA_FG_BLUE				0x01
-#define GFX_VGA_FG_GREEM			0x02
+#define GFX_VGA_FG_GREEN			0x02
 #define GFX_VGA_FG_CYAN				0x03
 #define GFX_VGA_FG_RED				0x04
 #define GFX_VGA_FG_MAGENTA			0x05
@@ -60,6 +60,7 @@ namespace gfx {
 			static void println(const char*, byte = GFX_VGA_DEFAULT_TEXT_COLOR);
 			static void newline();
 			static void clear(byte = GFX_VGA_DEFAULT_CLEAR_COLOR);
+			static void print_memory(void*, ulong = 16, byte = 16, byte = GFX_VGA_DEFAULT_TEXT_COLOR, byte = GFX_VGA_BG_BLACK | GFX_VGA_FG_GREEN);
 
 			static void key_event_handler(byte scan_code, byte chr);
 		private:

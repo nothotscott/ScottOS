@@ -64,8 +64,59 @@ namespace mem {
 		return address;
 	}
 
+	void* heap::realloc(void* address, ulong size) {
+		segment_header* seg;
+		aligned_segment_header* ash = (aligned_segment_header*)address - 1;
+		if(ash->is_aligned) {
+			seg = (segment_header*)(ulong)ash->segment_header;
+		} else{
+			seg = (segment_header*)address - 1;
+		}
+
+		ulong smaller_size = seg->mem_length < size ? seg->mem_length : size;
+		void* new_address = alloc(size);
+		memory::copy(new_address, address, size);
+		free(address);
+		return new_address;
+	}
+
+	void* heap::aligned_alloc(ulong alignment, ulong size) {
+		// Align alignment by byte
+		ulong alignment_rem = alignment % MEM_HEAP_ALIGN_SIZE_BLOCKS;
+		alignment -= alignment_rem;
+		alignment += alignment_rem == 0 ? 0 : MEM_HEAP_ALIGN_SIZE_BLOCKS;
+		// Align size by byte
+		ulong size_rem = size % MEM_HEAP_ALIGN_SIZE_BLOCKS;
+		size -= size_rem;
+		size += size_rem == 0 ? 0 : MEM_HEAP_ALIGN_SIZE_BLOCKS;
+		// Allocate full size without overflow but is sorta wasteful
+		void* address = alloc(size + alignment);
+		ulong address_aligned = (ulong)address;
+		// Align address along alignment
+		ulong rem = address_aligned % alignment;
+		address_aligned -= rem;
+		if(rem != 0) {	// can't reuse existing heap functions if the address isn't perfectly on the alignment
+			address_aligned += alignment;
+			aligned_segment_header* ash = (aligned_segment_header*)address_aligned - 1;
+			ash->is_aligned = true;
+			ash->segment_header = (ulong)address - sizeof(segment_header);
+		}
+		return (void*)address_aligned;
+	}
+
 	void heap::free(void* address) {
-		segment_header* current = ((segment_header*)address) - 1;
+		segment_header* current;
+		// Get current based on if it's an aligned header or not
+		aligned_segment_header* ash = (aligned_segment_header*)address - 1;
+		if(ash->is_aligned) {
+			current = (segment_header*)(ulong)ash->segment_header;
+		} else {
+			current = (segment_header*)address - 1;
+		}
+		/*if(current->prev == 0 && current->next == 0){
+			return;
+		}*/
+
 		current->free = true;
 		if(current < first) {
 			first = current;
